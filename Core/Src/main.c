@@ -41,7 +41,27 @@ int led_state = 0;
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+static void SetLedState(uint8_t led_state)  //对CS拉低拉高
+{
+    uint8_t writeEnableCmd ={0x06};
+    HAL_GPIO_WritePin(GPIOA,GPIO_PIN_7,GPIO_PIN_RESET);
+    HAL_SPI_Transmit(&hspi1,&writeEnableCmd,1,HAL_MAX_DELAY);
+    HAL_GPIO_WritePin(GPIOA,GPIO_PIN_7,GPIO_PIN_SET);
+    HAL_Delay(100);
+    uint8_t sectorEraseCmd[] ={0x20,0x00,0x00,0x00};
+    HAL_GPIO_WritePin(GPIOA,GPIO_PIN_7,GPIO_PIN_RESET);
+    HAL_SPI_Transmit(&hspi1,sectorEraseCmd,4,HAL_MAX_DELAY);
+    HAL_GPIO_WritePin(GPIOA,GPIO_PIN_7,GPIO_PIN_SET);
+    uint8_t pageProgCmd[5];
+    pageProgCmd[0] = 0x02;
+    pageProgCmd[1] = 0x00;
+    pageProgCmd[2] = 0x00;
+    pageProgCmd[3] = 0x00;
+    pageProgCmd[4] = led_state;
+    HAL_GPIO_WritePin(GPIOA,GPIO_PIN_7,GPIO_PIN_RESET);
+    HAL_SPI_Transmit(&hspi1,pageProgCmd,5,HAL_MAX_DELAY);
+    HAL_GPIO_WritePin(GPIOA,GPIO_PIN_7,GPIO_PIN_SET);
+}
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -104,29 +124,33 @@ OLED_Init();
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  uint8_t r = 255, g = 0, b = 0;
-  int step = 10;
-  while (1)
-  {
+
+  /* Infinite loop */
+/* USER CODE BEGIN WHILE */
+while (1)
+{
     /* USER CODE END WHILE */
-
-    // 简单的颜色渐变示例
-
-
-    /* USER CODE BEGIN 3 */
-        if (r == 255 && g < 255 && b == 0) { g += step; }
-    else if (r > 0 && g == 255 && b == 0) { r -= step; }
-    else if (r == 0 && g == 255 && b < 255) { b += step; }
-    else if (r == 0 && g > 0 && b == 255) { g -= step; }
-    else if (r < 255 && g == 0 && b == 255) { r += step; }
-    else if (r == 255 && g == 0 && b > 0) { b -= step; }
-
-    RGB_LED_SetColor(r, g, b);
-    HAL_Delay(30)  ; // 延时，控制渐变速度
+    // 按键检测和LED状态切换
+    if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_14) == GPIO_PIN_RESET) // 检测按键是否按下
+    {
+      HAL_Delay(50); // 延时消抖
+      if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_14) == GPIO_PIN_RESET) // 再次检测确认按键按下
+      {
+        led_state = !led_state; // 切换LED状态
+        if(led_state)
+        {
+          led_on();
+        }
+        else
+        {
+          led_off();
+        }
+        while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_14) == GPIO_PIN_RESET); // 等待按键释放
+      }
+    }
   }
-  /* USER CODE END 3 */
 }
-
+  /* USER CODE END 3 */
 /**
   * @brief System Clock Configuration
   * @retval None

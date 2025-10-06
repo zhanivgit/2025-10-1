@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "e:/trsalatec/HAL/2025-10-1/Core/Src",
-      "program": "e:/trsalatec/HAL/2025-10-1/Core/Src/build/Debug/outDebug",
+      "cwd": "e:/trsalatec/HALandRTOS/2025-10-1/Core/Src",
+      "program": "e:/trsalatec/HALandRTOS/2025-10-1/Core/Src/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

@@ -21,17 +21,20 @@ Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.0.1.0
 Dialog DLL:      TCM.DLL V1.32.0.0
  
 <h2>Project:</h2>
-E:\trsalatec\stm\2025-10-1\MDK-ARM\STM32-Hal.uvprojx
-Project File Date:  10/03/2025
+E:\trsalatec\HALandRTOS\2025-10-1\MDK-ARM\STM32-Hal.uvprojx
+Project File Date:  10/07/2025
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 5 (build 528)', folder: 'D:\51\ARM\ARMCC\Bin'
 Build target 'STM32-Hal'
 compiling main.c...
+../Core/Src/main.c(44): warning:  #177-D: function "SetLedState"  was declared but never referenced
+  static void SetLedState(uint8_t led_state)  //对CS拉低拉高
+../Core/Src/main.c: 1 warning, 0 errors
 linking...
-Program Size: Code=5784 RO-data=304 RW-data=16 ZI-data=1792  
+Program Size: Code=5760 RO-data=304 RW-data=20 ZI-data=1796  
 FromELF: creating hex file...
-"STM32-Hal\STM32-Hal.axf" - 0 Error(s), 0 Warning(s).
+"STM32-Hal\STM32-Hal.axf" - 0 Error(s), 1 Warning(s).
 
 <h2>Software Packages used:</h2>
 
